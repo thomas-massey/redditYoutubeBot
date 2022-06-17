@@ -29,9 +29,9 @@ driver = webdriver.Chrome(
     ) 
 
 reddit = praw.Reddit(
-    client_id="y2ypd4wXHnkZ9HGxSIZXaA",
-    client_secret="cDrW2FTkHjbLr4cN5MlTZ0svddsSIw",
-    user_agent="<console:YoutubeBotty:1.0>",
+    client_id=os.environ['RYBOT_CLIENT_ID'],
+    client_secret=os.environ['RYBOT_CLIENT_SECRET'],
+    user_agent=os.environ['RYBOT_USER_AGENT'],
 )
 
 subreddit = reddit.subreddit(input("Enter a subreddit: "))
