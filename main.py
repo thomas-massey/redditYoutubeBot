@@ -34,11 +34,11 @@ reddit = praw.Reddit(
     user_agent=os.environ['RYBOT_USER_AGENT'],
 )
 
-subreddit = reddit.subreddit(input("Enter a subreddit: "))
+subreddit = reddit.subreddit("all")
 
 count = 0
 
-for post in subreddit.hot(limit=1):
+for post in subreddit.hot(limit=5):
     if database.check_if_post_exists(post.id):
         print("Post already exists.")
         continue
@@ -61,7 +61,7 @@ for post in subreddit.hot(limit=1):
         # sleep(1)
         text = post.title
         # tidy up the text to make it easier to process
-        text = misc.tidy_up_text(text)
+        # text = misc.tidy_up_text(text)
         audio = gTTS(text=text, lang=language)
         audio.save(f"/home/thomas/redditYoutubeBot/posts/{post.id}/main/audio_title_{post.id}.mp3")
         if post.selftext:
@@ -74,7 +74,11 @@ for post in subreddit.hot(limit=1):
         # Accept the cookies
         # driver.find_element(By.XPATH, '//button[@id="js-accept-button"]').click()
         # Now select part of the page to screenshot.
-        driver.find_element(by=By.XPATH, value=f'//div[@id="t3_{post.id}"]').screenshot(f"posts/{post.id}/main/screenshot_{post.id}.png")
+        try:
+            driver.find_element(by=By.XPATH, value=f'//div[@id="t3_{post.id}"]').screenshot(f"posts/{post.id}/main/screenshot_{post.id}.png")
+        except:
+            print("Could not find element.")
+            continue
 
         count += 1
         database.add_post(post.id)
